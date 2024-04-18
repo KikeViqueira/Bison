@@ -33,12 +33,16 @@ input: /*Cadena vacia*/
       ;
 
 line: '\n'
-    | exp '\n' { printf ("\t%.10f\n", $1); }
+    | exp '\n' { printf ("\t%.2f\n", $1); }
     | exp ';' '\n' {/*No se hace nada*/}
     | asignacion '\n'
     ;
 
-asignacion: VAR '=' exp  { $1.contenido = $3; printf("Asignado: %s = %.10f\n", $1.cadena, $1.contenido); }
+asignacion: VAR '=' exp  { $1.contenido = $3;
+		printf("Asignado: %s = %.2f\n", $1.cadena, $1.contenido);
+		buscarLexema(&$1, $1.contenido); /*Buscamos el lexema en la TS, si no esta lo metemos y si está modificamos su valor*/
+		imprimirTablaSimbolos();
+		 }
 
 exp: NUM { $$ = $1; }
     | exp '+' exp { $$ = $1 + $3; }
@@ -50,8 +54,6 @@ exp: NUM { $$ = $1; }
     | '(' exp ')' { $$ = $2; }
     ;
 
-
-
 %%
 
 void yyerror(const char *s) {
@@ -59,7 +61,9 @@ void yyerror(const char *s) {
 }
 
 int main() {
+    initTS();
     printf("> ");
     while(yyparse());
+    liberarTS(); /*Liberamos los recursos consumidos por la TS*/
     return 0;
 }

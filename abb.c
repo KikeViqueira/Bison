@@ -195,6 +195,12 @@ void _modificar(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB nodo) {
 }
 
 
+/* Permite modificar el nodo extrayendo del mismo la clave */
+void modificarElementoAbb(TABB A, TIPOELEMENTOABB nodo) {
+    TIPOCLAVE cl = _clave_elem(&nodo);
+    _modificar(A, cl, nodo);
+}
+
 void imprimir(TABB A) {
     if (!esAbbVacio(A)) {
         imprimir(izqAbb(A));

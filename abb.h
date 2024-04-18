@@ -89,6 +89,14 @@ void insertarElementoAbb(TABB *A, TIPOELEMENTOABB E);
  */
 void suprimirElementoAbb(TABB *A,TIPOELEMENTOABB E);
 
+
+/**
+ * Busca el nodo con clave la del nodo y lo modifica.
+ * @param A
+ * @param nodo
+ */
+void modificarElementoAbb(TABB A, TIPOELEMENTOABB nodo);
+
 /**
  * Imprime todos los nodos existentes en el arbol
  * @param A

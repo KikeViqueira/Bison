@@ -511,8 +511,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    31,    31,    32,    35,    36,    37,    38,    41,    43,
-      44,    45,    46,    47,    48,    49,    50
+       0,    31,    31,    32,    35,    36,    37,    38,    41,    47,
+      48,    49,    50,    51,    52,    53,    54
 };
 #endif
 
@@ -1085,68 +1085,78 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 5: /* line: exp '\n'  */
+#line 36 "calc.y"
+               { printf ("\t%.2f\n", (yyvsp[-1].val)); }
+#line 1092 "calc.tab.c"
+    break;
+
   case 6: /* line: exp ';' '\n'  */
 #line 37 "calc.y"
                    {/*No se hace nada*/}
-#line 1092 "calc.tab.c"
+#line 1098 "calc.tab.c"
     break;
 
   case 8: /* asignacion: VAR '=' exp  */
 #line 41 "calc.y"
-                         { (yyvsp[-2].variable).contenido = (yyvsp[0].val); printf("Asignado: %s = %.10f\n", (yyvsp[-2].variable).cadena, (yyvsp[-2].variable).contenido); }
-#line 1098 "calc.tab.c"
+                         { (yyvsp[-2].variable).contenido = (yyvsp[0].val);
+		printf("Asignado: %s = %.2f\n", (yyvsp[-2].variable).cadena, (yyvsp[-2].variable).contenido);
+		buscarLexema(&(yyvsp[-2].variable), (yyvsp[-2].variable).contenido); /*Buscamos el lexema en la TS, si no esta lo metemos y si está modificamos su valor*/
+		imprimirTablaSimbolos();
+		 }
+#line 1108 "calc.tab.c"
     break;
 
   case 9: /* exp: NUM  */
-#line 43 "calc.y"
+#line 47 "calc.y"
          { (yyval.val) = (yyvsp[0].val); }
-#line 1104 "calc.tab.c"
+#line 1114 "calc.tab.c"
     break;
 
   case 10: /* exp: exp '+' exp  */
-#line 44 "calc.y"
+#line 48 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val); }
-#line 1110 "calc.tab.c"
+#line 1120 "calc.tab.c"
     break;
 
   case 11: /* exp: exp '-' exp  */
-#line 45 "calc.y"
+#line 49 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val); }
-#line 1116 "calc.tab.c"
+#line 1126 "calc.tab.c"
     break;
 
   case 12: /* exp: exp '*' exp  */
-#line 46 "calc.y"
+#line 50 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val); }
-#line 1122 "calc.tab.c"
+#line 1132 "calc.tab.c"
     break;
 
   case 13: /* exp: exp '/' exp  */
-#line 47 "calc.y"
+#line 51 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val); }
-#line 1128 "calc.tab.c"
+#line 1138 "calc.tab.c"
     break;
 
   case 14: /* exp: '-' exp  */
-#line 48 "calc.y"
+#line 52 "calc.y"
                         { (yyval.val) = -(yyvsp[0].val); }
-#line 1134 "calc.tab.c"
+#line 1144 "calc.tab.c"
     break;
 
   case 15: /* exp: exp '^' exp  */
-#line 49 "calc.y"
+#line 53 "calc.y"
                   { (yyval.val) = pow((yyvsp[-2].val), (yyvsp[0].val)); }
-#line 1140 "calc.tab.c"
+#line 1150 "calc.tab.c"
     break;
 
   case 16: /* exp: '(' exp ')'  */
-#line 50 "calc.y"
+#line 54 "calc.y"
                   { (yyval.val) = (yyvsp[-1].val); }
-#line 1146 "calc.tab.c"
+#line 1156 "calc.tab.c"
     break;
 
 
-#line 1150 "calc.tab.c"
+#line 1160 "calc.tab.c"
 
       default: break;
     }
@@ -1339,7 +1349,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 55 "calc.y"
+#line 57 "calc.y"
 
 
 void yyerror(const char *s) {
@@ -1347,7 +1357,9 @@ void yyerror(const char *s) {
 }
 
 int main() {
+    initTS();
     printf("> ");
     while(yyparse());
+    liberarTS(); /*Liberamos los recursos consumidos por la TS*/
     return 0;
 }

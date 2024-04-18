@@ -5,7 +5,7 @@
 void initTS();
 
 // Función para buscar un lexema dentro de la tabla de símbolos, mete su numero correspondiente en la estructura
-void buscarLexema(token *componente);
+void buscarLexema(token *componente, double nuevoContenido);
 
 // Función para insertar un lexema en la tabla de símbolos
 void insertarLexema(char *lexema_a_insertar,TIPOELEMENTOABB *nodo);
