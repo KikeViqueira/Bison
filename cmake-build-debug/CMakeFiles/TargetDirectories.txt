@@ -1,0 +1,3 @@
+/home/kike/Documentos/3Grei/2Cuatri/Compiladores/Bison/cmake-build-debug/CMakeFiles/Bison.dir
+/home/kike/Documentos/3Grei/2Cuatri/Compiladores/Bison/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kike/Documentos/3Grei/2Cuatri/Compiladores/Bison/cmake-build-debug/CMakeFiles/rebuild_cache.dir
