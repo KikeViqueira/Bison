@@ -56,6 +56,19 @@ void destruirAbb(TABB *A) {
     }
 }
 
+void limpiarWorkspace(TABB *A) {
+    if (*A != NULL) {
+        limpiarWorkspace(&(*A)->izq);
+        limpiarWorkspace(&(*A)->der);
+        if(((*A)->info.type)!=1){
+            //Se eliminan todos los nodos del arbol que no sean funciones
+            _destruir_elem(&(*A)->info);
+            free(*A);
+            *A = NULL;
+        }
+    }
+}
+
 //OPERACIONES DE INFORMACIÓN
 
 unsigned esAbbVacio(TABB A) {
@@ -94,18 +107,19 @@ unsigned _es_miembro_clave(TABB A, TIPOCLAVE cl) {
 }
 
 
-void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo) {
+void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo, int tipo) {
     if (esAbbVacio(A)) {
         return;
     }
     int comp = _comparar_clave_elem(cl, A->info);
 
-    if (comp == 0) { // cl == A->info
+    //De esta manera si hay una funcion y variable con el mismo lexema, el tipo que se ha recibido por argumentos será el que decida que es lo que estamos buscando
+    if (comp == 0 && A->info.type==tipo) { // cl == A->info
         *nodo = A->info;
     } else if (comp < 0) { // cl < A->info
-        buscarNodoAbb(A->izq, cl, nodo);
+        buscarNodoAbb(A->izq, cl, nodo, tipo);
     } else { // cl > A->info
-        buscarNodoAbb(A->der, cl, nodo);
+        buscarNodoAbb(A->der, cl, nodo, tipo);
     }
 }
 //OPERACIONES DE MODIFICACIÓN
@@ -204,7 +218,9 @@ void modificarElementoAbb(TABB A, TIPOELEMENTOABB nodo) {
 void imprimir(TABB A) {
     if (!esAbbVacio(A)) {
         imprimir(izqAbb(A));
-        printf(GREEN"Entrada de la tabla de simbolos -> %s , valor -> %f\n"RESET, A->info.lexema, A->info.value);
+        //Dependiendo de si se trata de una variable o una funcion hacemos prints distintos
+        if (A->info.type==0) printf(GREEN "%-20s | %10.2f | %-7s\n" RESET, A->info.lexema, A->info.tipo.var, "VAR");
+        else printf(GREEN "%-20s | %10p | %-7s\n" RESET, A->info.lexema, A->info.tipo.fnctptr, "FUNC");
         imprimir(derAbb(A));
     }
 }

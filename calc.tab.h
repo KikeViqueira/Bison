@@ -54,9 +54,12 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    VAR = 258,                     /* VAR  */
-    NUM = 259,                     /* NUM  */
-    NEG = 260                      /* NEG  */
+    FUNC = 258,                    /* FUNC  */
+    VAR = 259,                     /* VAR  */
+    NUM = 260,                     /* NUM  */
+    COMANDO = 261,                 /* COMANDO  */
+    LOAD = 262,                    /* LOAD  */
+    NEG = 263                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -65,15 +68,17 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "calc.y"
+#line 17 "calc.y"
 
     double val; /*Para devolver numeros*/
+    char *comando; /*Para saber que comando se ha introducido por terminal*/
     struct {
     	char* cadena;
     	double contenido;
+    	double (*fnctptr)();
     }variable;
 
-#line 77 "calc.tab.h"
+#line 82 "calc.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

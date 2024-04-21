@@ -61,6 +61,12 @@ build CMakeFiles/Bison.dir/abb.c.o: C_COMPILER__Bison_Debug /home/kike/Documento
   OBJECT_DIR = CMakeFiles/Bison.dir
   OBJECT_FILE_DIR = CMakeFiles/Bison.dir
 
+build CMakeFiles/Bison.dir/funciones.c.o: C_COMPILER__Bison_Debug /home/kike/Documentos/3Grei/2Cuatri/Compiladores/Bison/funciones.c || cmake_object_order_depends_target_Bison
+  DEP_FILE = CMakeFiles/Bison.dir/funciones.c.o.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles/Bison.dir
+  OBJECT_FILE_DIR = CMakeFiles/Bison.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Bison
@@ -69,7 +75,7 @@ build CMakeFiles/Bison.dir/abb.c.o: C_COMPILER__Bison_Debug /home/kike/Documento
 #############################################
 # Link the executable Bison
 
-build Bison: C_EXECUTABLE_LINKER__Bison_Debug CMakeFiles/Bison.dir/TS.c.o CMakeFiles/Bison.dir/abb.c.o
+build Bison: C_EXECUTABLE_LINKER__Bison_Debug CMakeFiles/Bison.dir/TS.c.o CMakeFiles/Bison.dir/abb.c.o CMakeFiles/Bison.dir/funciones.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Bison.dir
   POST_BUILD = :

@@ -2,18 +2,13 @@
 #define ABB_H
 
 // Estructura para almacenar los tokens y pasarselos al analizador sintáctico
-/*typedef struct {
-    char *lexema; //Nombre del símbolo
-    int type; //Tipo de símbolo: Bien VAR=0 o FNCT=1
-    union {
-        double var; //Valor de una VAR
-        double (*fnctptr)(); //Valor de una FNCT
-    } value;
-} token;*/
-
 typedef struct {
-    char *lexema; //Nombre del símbolo
-    double value; //Valor de la variable
+    char *lexema; //Nombre de la variable o de la funcion
+    int type; // Un indicador para saber si es una variable (0), una función (1) o una constante (2)
+    union {
+        double var; /* valor de una VAR */
+        double (*fnctptr)(); /* valor de una FNCT */
+    } tipo;
 } token;
 
 /**
@@ -46,6 +41,13 @@ void crearAbb(TABB *A);
  */
 void destruirAbb(TABB *A);
 
+
+/**
+ * Limpia el arbol recursivamente, excepto los nodos que son funciones
+ * @param A El arbol que queremos limpiar
+ */
+void limpiarWorkspace(TABB *A);
+
 //FUNCIONES DE INFORMACIÓN
 /**
  * Comprueba si el arbol esta vacio
@@ -70,8 +72,9 @@ TABB derAbb(TABB A);
  * @param A Arbol binario en el que se busca el nodo.
  * @param cl Clave que se buscara.
  * @param nodo Puntero a un tipoelem.
+ * @param tipo bandera para indicar si lo que estamos buscando es una variable o una función
  */
-void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo);
+void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo, int tipo);
 
 //FUNCIONES DE MODIFICACIÓN
 /**
