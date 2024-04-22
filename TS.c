@@ -3,7 +3,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <math.h>
-
+#define PI 3.14159265358979323846 //Definimos la constante pi que no se podra modificar su valor
 #define GREEN "\x1b[32m"
 #define RESET "\x1b[0m"
 
@@ -32,6 +32,8 @@ void initTS() {
             {"ln", 1, {.fnctptr = log}},
             {"exp", 1, {.fnctptr = exp}},
             {"sqrt", 1, {.fnctptr = sqrt}},
+            //Tenemos que meter a mayores la constante pi
+            {"pi", 2, {.var = PI}}
     };
 
     int tamanho = sizeof (funciones) / sizeof (token);
@@ -54,21 +56,39 @@ void buscarVariable(char *lexema, double nuevoContenido) {
     nodoAux.lexema=NULL;
 
     // Tenemos que buscar el nodo con el identificador o clave lexema, si no está se llamará a insertarLexema()
-    buscarNodoAbb(arbol, lexema, &nodoAux,VARIABLE);
+    buscarNodoAbb(arbol, lexema, &nodoAux);
 
-    if (nodoAux.lexema == NULL) {
+    if (nodoAux.lexema == NULL || nodoAux.type !=0) {
         /*Si se entra aqui es porque la función buscarnodo no ha encontrado ningún nodo cuya clave coincida con el lexema
          que se ha pasado como clave, en el caso de no entrar en el if ya hemos encontrado el nodo*/
         nodoAux.type=0; //Se trata de una variable por lo que su respectivo campo vale 0
         nodoAux.tipo.var=nuevoContenido;
         insertarLexema(lexema, &nodoAux);
     }
-    else{//En otro caso sabemos que el token existe en el arbol con un determinado contenido, el cual modificaremos con el nuevo recibido
-        nodoAux.tipo.var=nuevoContenido;
-        modificarElementoAbb(arbol,nodoAux);//Modificamos el valor del token
+    else{
+        if (!variable_con_nombre_FuncionConst(lexema)){
+            //Si la variable no tiene el nombre de una función ni el de una constante, se puede modificar su valor
+            nodoAux.tipo.var=nuevoContenido;
+            modificarElementoAbb(arbol,nodoAux);//Modificamos el valor del token
+        }
     }
 }
 
+int variable_con_nombre_FuncionConst(char *lexema){
+    //Función que devuelve 1 si el lexema que se le pasa es el nombre de una función y 0 si no lo es
+    TIPOELEMENTOABB nodoAux;
+    nodoAux.lexema=NULL;
+
+    buscarNodoAbb(arbol,lexema,&nodoAux);
+
+    if (nodoAux.lexema==NULL || nodoAux.type!=2 || nodoAux.type!=1){
+        /*En este caso sabemos que la variable no tiene el nombre de una función
+        ni el nombre de una constante, por lo que devolvemos 1 para que no se pueda seguir con la ejecución*/
+        return 1;
+    }
+    return 0;
+
+}
 
 void insertarLexema(char *lexema_a_insertar, TIPOELEMENTOABB *nodo) {
     // tenemos que hacer una copia del lexema cuando lo metamos en la TS, porque si no cuando el sintáctico hago un free del token este se borrará también de la tabla de símbolos
@@ -78,15 +98,15 @@ void insertarLexema(char *lexema_a_insertar, TIPOELEMENTOABB *nodo) {
     insertarElementoAbb(&arbol, *nodo);
 }
 
-double recuperarContenidoVariable(char *lexema){
+double recuperarContenidoVarCons(char *lexema){
     TIPOELEMENTOABB nodoAux;
     nodoAux.lexema=NULL;
 
     // Tenemos que buscar el nodo con el identificador o clave lexema, si no está se llamará a insertarLexema()
-    buscarNodoAbb(arbol, lexema, &nodoAux, VARIABLE);
+    buscarNodoAbb(arbol, lexema, &nodoAux);
 
-    if(nodoAux.lexema==NULL){
-        //Si es null sabemos que la variable no está en la tabla de símbolosla variable
+    if(nodoAux.lexema==NULL || nodoAux.type!=1){
+        //Si es null sabemos que la variable no está en la tabla de símbolos, y si es una funcion tampoco nos interesa
         nodoAux.tipo.var=-1;
         devolver=0;//Desactivamos el valor de la bandera para que no se pueda recibir el valor en el bison, ya que la variable no está en la TS
     }
@@ -97,17 +117,15 @@ double (*recuperarContenidoFuncion(char *lexema))(void){
     TIPOELEMENTOABB nodoAux;
     nodoAux.lexema=NULL;
 
-    //Buscamos la función con el nombre que hemos recibido por parámetros
-    buscarNodoAbb(arbol, lexema, &nodoAux,FUNCION);
+    buscarNodoAbb(arbol, lexema, &nodoAux);
 
-    if(nodoAux.lexema==NULL){
+    if(nodoAux.lexema==NULL || nodoAux.type!=1){
         //Si es null sabemos que la variable no está en la tabla de símbolosla variable
         nodoAux.tipo.fnctptr=NULL;
         devolver=0;//Desactivamos el valor de la bandera para que no se pueda recibir el valor en el bison, ya que la función no está en la TS
     }
     return  nodoAux.tipo.fnctptr;
 }
-
 
 void imprimirTablaSimbolos() {
     printf("\n" GREEN "CONTENIDO DE LA TABLA DE SIMBOLOS:\n" RESET);
@@ -132,11 +150,13 @@ int tipoIdentificador(char *lexema){
     TIPOELEMENTOABB nodoAux;
     nodoAux.lexema=NULL;
 
-    buscarNodoAbb(arbol,lexema,&nodoAux,FUNCION);
+    buscarNodoAbb(arbol,lexema,&nodoAux);
 
-    if (nodoAux.lexema==NULL){
-        //En este caso el identificador reconocido por el flex no está en la tabla de símbolos, por lo que es un nuevo identificador que bison guardará mas adelante
-        nodoAux.type=0;//Ponemos este valor al tratarse de una variable
+    if (nodoAux.lexema == NULL || nodoAux.type == 0) {
+        return 0;//Ponemos este valor al tratarse de una variable
     }
-    return nodoAux.type;
+    else if (nodoAux.lexema == NULL || nodoAux.type == 1) {
+        return 1; // Ponemos este valor al tratarse de una función
+    }
+    return 2; // Ponemos este valor al tratarse de una constante
 }

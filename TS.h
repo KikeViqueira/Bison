@@ -15,8 +15,8 @@ void buscarVariable(char *lexema, double nuevoContenido);
 // Función para insertar un lexema en la tabla de símbolos
 void insertarLexema(char *lexema_a_insertar,TIPOELEMENTOABB *nodo);
 
-//Funcion para devolver a bison el contenido de una variable si esta está en la tabla de símbolos
-double recuperarContenidoVariable(char *lexema);
+//Funcion para devolver a bison el contenido de una variable o constante si esta está en la tabla de símbolos
+double recuperarContenidoVarCons(char *lexema);
 
 //Funcion para devolver a bison el puntero de una función si esta está en la tabla de símbolos
 double (*recuperarContenidoFuncion(char *lexema))(void);

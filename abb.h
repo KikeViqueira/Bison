@@ -72,9 +72,8 @@ TABB derAbb(TABB A);
  * @param A Arbol binario en el que se busca el nodo.
  * @param cl Clave que se buscara.
  * @param nodo Puntero a un tipoelem.
- * @param tipo bandera para indicar si lo que estamos buscando es una variable o una función
  */
-void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo, int tipo);
+void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo);
 
 //FUNCIONES DE MODIFICACIÓN
 /**

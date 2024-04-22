@@ -1,0 +1,13 @@
+a = 1+1
+2*3
+a
+WORKSPACE
+ECHO(OFF)
+3+5
+CLEAR
+WORKSPACE
+ECHO(ON)
+a
+a = sin(1);
+a
+

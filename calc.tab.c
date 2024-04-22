@@ -77,13 +77,14 @@
 #include "funciones.h"
 int yylex();
 void yyerror(const char *s);
+extern void liberarMemoria();
 
 int echo=1; /*Variable la cual nos dira si el output se muestra o no
 1-> se muestra a no se que se acaba en ;
 0-> No se muestra nunca el output
 NOTA: Este el echo activado o no la salida de los distintos comandos siempre se mostrarán por pantalla*/
 
-#line 87 "calc.tab.c"
+#line 88 "calc.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -523,9 +524,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    45,    45,    46,    49,    50,    51,    52,    53,    54,
-      55,    59,    74,    80,    88,    99,   119,   120,   133,   134,
-     135,   136,   137,   138,   139
+       0,    46,    46,    47,    50,    51,    52,    53,    54,    55,
+      56,    60,    75,    81,    89,   100,   120,   121,   134,   135,
+     136,   137,   138,   139,   140
 };
 #endif
 
@@ -1112,43 +1113,43 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* input: input line  */
-#line 46 "calc.y"
-                   {printf("> ");}
-#line 1118 "calc.tab.c"
+#line 47 "calc.y"
+                   {liberarMemoria(); printf("> ");}
+#line 1119 "calc.tab.c"
     break;
 
   case 5: /* line: exp '\n'  */
-#line 50 "calc.y"
+#line 51 "calc.y"
                {if(echo==1) printf ("\t%.2f\n", (yyvsp[-1].val)); }
-#line 1124 "calc.tab.c"
+#line 1125 "calc.tab.c"
     break;
 
   case 6: /* line: exp ';' '\n'  */
-#line 51 "calc.y"
+#line 52 "calc.y"
                    {/*No se hace nada*/}
-#line 1130 "calc.tab.c"
+#line 1131 "calc.tab.c"
     break;
 
   case 7: /* line: asignacion '\n'  */
-#line 52 "calc.y"
+#line 53 "calc.y"
                       {if(echo==1) printf("Asignado: %s = %.2f\n", (yyvsp[-1].variable).cadena, (yyvsp[-1].variable).contenido);}
-#line 1136 "calc.tab.c"
+#line 1137 "calc.tab.c"
     break;
 
   case 8: /* line: asignacion ';' '\n'  */
-#line 53 "calc.y"
+#line 54 "calc.y"
                           {/*No se hace nada*/}
-#line 1142 "calc.tab.c"
+#line 1143 "calc.tab.c"
     break;
 
   case 10: /* line: funcion '\n'  */
-#line 55 "calc.y"
+#line 56 "calc.y"
                    {if(echo==1) printf("Resultado obtenido con %s -> %.2f\n", (yyvsp[-1].variable).cadena ,(yyvsp[-1].variable).contenido);}
-#line 1148 "calc.tab.c"
+#line 1149 "calc.tab.c"
     break;
 
   case 11: /* comando: COMANDO  */
-#line 59 "calc.y"
+#line 60 "calc.y"
                  {
 	if (strcmp((yyvsp[0].comando), "HELP")==0){
 		printf("Mostrar ayuda:\n 1. HELP\n 2. EXIT\n 3. CLEAR\n 4. WORKSPACE\n 5. LOAD fichero\n 6. ECHO(ON/OFF)\n");
@@ -1164,19 +1165,19 @@ yyreduce:
 		echo=0; /*En cualquier otro caso sabemos que estamos en el caso de desactivar el echo, no se mostrará nunca el output*/
 	}
    	}
-#line 1168 "calc.tab.c"
+#line 1169 "calc.tab.c"
     break;
 
   case 12: /* comando: LOAD  */
-#line 74 "calc.y"
+#line 75 "calc.y"
                {
    		leer_archivo((yyvsp[0].comando));
    	}
-#line 1176 "calc.tab.c"
+#line 1177 "calc.tab.c"
     break;
 
   case 13: /* asignacion: VAR '=' exp  */
-#line 80 "calc.y"
+#line 81 "calc.y"
                          {
 		if(!isnan((yyvsp[0].val))){ /*Si la expresion recibida es un número, podemos realizar la asignación*/
 			(yyvsp[-2].variable).contenido = (yyvsp[0].val);
@@ -1185,11 +1186,11 @@ yyreduce:
 		}
 		else printf("No se puede hacer la asignación\n");
 	 }
-#line 1189 "calc.tab.c"
+#line 1190 "calc.tab.c"
     break;
 
   case 14: /* asignacion: VAR '=' funcion  */
-#line 88 "calc.y"
+#line 89 "calc.y"
                            {
 		 if(!isnan((yyvsp[0].variable).contenido)){
 			(yyvsp[-2].variable).contenido = (yyvsp[0].variable).contenido;
@@ -1199,11 +1200,11 @@ yyreduce:
 		else printf("No se puede hacer la asignación\n");
 
 	 }
-#line 1203 "calc.tab.c"
+#line 1204 "calc.tab.c"
     break;
 
   case 15: /* funcion: FUNC '(' exp ')'  */
-#line 99 "calc.y"
+#line 100 "calc.y"
                           {
 	if(!isnan((yyvsp[-1].val))){ /*Si la expresión es distinta de NAN, proecedemos a mirar si existe la función que se ha reconocido*/
 		(yyvsp[-3].variable).fnctptr = recuperarContenidoFuncion((yyvsp[-3].variable).cadena); /*Pedimos a TS.c que nos devuelva el valor de la función*/
@@ -1222,17 +1223,17 @@ yyreduce:
 	}
 	else printf("El argumento de la función no es un número o no está definido\n");
 	}
-#line 1226 "calc.tab.c"
+#line 1227 "calc.tab.c"
     break;
 
   case 16: /* exp: NUM  */
-#line 119 "calc.y"
+#line 120 "calc.y"
          { (yyval.val) = (yyvsp[0].val); }
-#line 1232 "calc.tab.c"
+#line 1233 "calc.tab.c"
     break;
 
   case 17: /* exp: VAR  */
-#line 120 "calc.y"
+#line 121 "calc.y"
           {
       	   	(yyvsp[0].variable).contenido = recuperarContenidoVariable((yyvsp[0].variable).cadena); /*Pedimos a TS.c que nos devuelva el valor de la variable*/
       	   	int bandera = getValor(); /*Mirar valor bandera de la TS, y hacer el respectivo comportamiento*/
@@ -1246,53 +1247,53 @@ yyreduce:
       	   		(yyval.val)=NAN;
       	   	}
       	   }
-#line 1250 "calc.tab.c"
+#line 1251 "calc.tab.c"
     break;
 
   case 18: /* exp: exp '+' exp  */
-#line 133 "calc.y"
+#line 134 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val); }
-#line 1256 "calc.tab.c"
+#line 1257 "calc.tab.c"
     break;
 
   case 19: /* exp: exp '-' exp  */
-#line 134 "calc.y"
+#line 135 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val); }
-#line 1262 "calc.tab.c"
+#line 1263 "calc.tab.c"
     break;
 
   case 20: /* exp: exp '*' exp  */
-#line 135 "calc.y"
+#line 136 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val); }
-#line 1268 "calc.tab.c"
+#line 1269 "calc.tab.c"
     break;
 
   case 21: /* exp: exp '/' exp  */
-#line 136 "calc.y"
+#line 137 "calc.y"
                   { (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val); }
-#line 1274 "calc.tab.c"
+#line 1275 "calc.tab.c"
     break;
 
   case 22: /* exp: '-' exp  */
-#line 137 "calc.y"
+#line 138 "calc.y"
                         { (yyval.val) = -(yyvsp[0].val); }
-#line 1280 "calc.tab.c"
+#line 1281 "calc.tab.c"
     break;
 
   case 23: /* exp: exp '^' exp  */
-#line 138 "calc.y"
+#line 139 "calc.y"
                   { (yyval.val) = pow((yyvsp[-2].val), (yyvsp[0].val)); }
-#line 1286 "calc.tab.c"
+#line 1287 "calc.tab.c"
     break;
 
   case 24: /* exp: '(' exp ')'  */
-#line 139 "calc.y"
+#line 140 "calc.y"
                   { (yyval.val) = (yyvsp[-1].val); }
-#line 1292 "calc.tab.c"
+#line 1293 "calc.tab.c"
     break;
 
 
-#line 1296 "calc.tab.c"
+#line 1297 "calc.tab.c"
 
       default: break;
     }
@@ -1485,7 +1486,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 142 "calc.y"
+#line 143 "calc.y"
 
 
 

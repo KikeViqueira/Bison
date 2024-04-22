@@ -2,6 +2,7 @@
 #include "calc.tab.h"
 #include "TS.h"
 #include "funciones.h"
+
 %}
 
 %%
@@ -15,9 +16,10 @@
 "CLEAR"                               {yylval.comando = strdup(yytext); return COMANDO; }
 [a-zA-Z_][a-zA-Z0-9_]*                {
                                         int tipo = tipoIdentificador(yytext);
-                                        yylval.variable.cadena = strdup(yytext);
+                                        yylval.token.cadena = strdup(yytext);  
                                         if(tipo==0) return VAR;
-                                        else return FUNC;
+                                        else if (tipo==1) return FUNC;
+                                        else return CONS;
                                       }
 
 LOAD[ \t]+([a-zA-Z0-9_.\-]+\.txt)     {
@@ -37,10 +39,10 @@ LOAD[ \t]+([a-zA-Z0-9_.\-]+\.txt)     {
 ";"                                   { return ';'; }
 [ \t]+              { /* Ignorar espacios en blanco y tabs */ }
 \n                  {return '\n'; }
-.                                     { return *yytext; }
 
 <<EOF>> {
     terminar_archivo();
+    return EOF;
 }
 
 %%

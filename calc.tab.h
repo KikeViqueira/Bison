@@ -68,7 +68,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "calc.y"
+#line 18 "calc.y"
 
     double val; /*Para devolver numeros*/
     char *comando; /*Para saber que comando se ha introducido por terminal*/

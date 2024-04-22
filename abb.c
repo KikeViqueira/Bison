@@ -107,19 +107,19 @@ unsigned _es_miembro_clave(TABB A, TIPOCLAVE cl) {
 }
 
 
-void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo, int tipo) {
+void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo) {
     if (esAbbVacio(A)) {
         return;
     }
     int comp = _comparar_clave_elem(cl, A->info);
 
     //De esta manera si hay una funcion y variable con el mismo lexema, el tipo que se ha recibido por argumentos será el que decida que es lo que estamos buscando
-    if (comp == 0 && A->info.type==tipo) { // cl == A->info
+    if (comp == 0) { // cl == A->info
         *nodo = A->info;
     } else if (comp < 0) { // cl < A->info
-        buscarNodoAbb(A->izq, cl, nodo, tipo);
+        buscarNodoAbb(A->izq, cl, nodo);
     } else { // cl > A->info
-        buscarNodoAbb(A->der, cl, nodo, tipo);
+        buscarNodoAbb(A->der, cl, nodo);
     }
 }
 //OPERACIONES DE MODIFICACIÓN

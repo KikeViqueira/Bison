@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 23
-#define YY_END_OF_BUFFER 24
+#define YY_NUM_RULES 22
+#define YY_END_OF_BUFFER 23
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,7 +362,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[70] =
     {   0,
-        0,    0,   24,   22,   20,   21,   17,   18,   14,   12,
+        0,    0,   23,   22,   20,   21,   17,   18,   14,   12,
        13,   15,    9,   19,   10,    7,    7,    7,    7,    7,
         7,   16,   20,   11,    9,    9,    0,    7,    7,    7,
         7,    7,    7,    7,    9,    0,    9,    7,    7,    7,
@@ -494,8 +494,13 @@ char *yytext;
 #include "calc.tab.h"
 #include "TS.h"
 #include "funciones.h"
-#line 498 "lex.yy.c"
-#line 499 "lex.yy.c"
+
+#define MAX_DIRECCIONES 16 //Máximo de dirreciones que bison podrá recibir en una línea
+int direcciones=0;
+void *arrayDirecciones[MAX_DIRECCIONES];
+
+#line 503 "lex.yy.c"
+#line 504 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -712,10 +717,10 @@ YY_DECL
 		}
 
 	{
-#line 7 "flex.l"
+#line 12 "flex.l"
 
 
-#line 719 "lex.yy.c"
+#line 724 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -774,135 +779,132 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 9 "flex.l"
-{yylval.comando = strdup(yytext); return COMANDO; }
+#line 14 "flex.l"
+{yylval.comando = strdup(yytext); arrayDirecciones[direcciones++]; return COMANDO; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 10 "flex.l"
-{yylval.comando = strdup(yytext); return COMANDO; }
+#line 15 "flex.l"
+{yylval.comando = strdup(yytext); arrayDirecciones[direcciones++]; return COMANDO; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "flex.l"
-{yylval.comando = strdup(yytext); return COMANDO; }
+#line 17 "flex.l"
+{yylval.comando = strdup(yytext); arrayDirecciones[direcciones++]; return COMANDO; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 13 "flex.l"
-{yylval.comando = strdup(yytext); return COMANDO; }
+#line 18 "flex.l"
+{yylval.comando = strdup(yytext); arrayDirecciones[direcciones++]; return COMANDO; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 14 "flex.l"
-{yylval.comando = strdup(yytext); return COMANDO; }
+#line 19 "flex.l"
+{yylval.comando = strdup(yytext); arrayDirecciones[direcciones++]; return COMANDO; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 15 "flex.l"
-{yylval.comando = strdup(yytext); return COMANDO; }
+#line 20 "flex.l"
+{yylval.comando = strdup(yytext); arrayDirecciones[direcciones++]; return COMANDO; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 16 "flex.l"
+#line 21 "flex.l"
 {
                                         int tipo = tipoIdentificador(yytext);
                                         yylval.variable.cadena = strdup(yytext);
+                                        arrayDirecciones[direcciones++];
                                         if(tipo==0) return VAR;
                                         else return FUNC;
                                       }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 23 "flex.l"
+#line 29 "flex.l"
 {
                                         yylval.comando = strdup(yytext + 5); // Extraemos el archivo directamente, no se guarda "LOAD "
+                                        arrayDirecciones[direcciones++];
                                         return LOAD; // Retornar un token LOAD a Bison
                                       }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 27 "flex.l"
+#line 34 "flex.l"
 { yylval.val = atof(yytext); return NUM; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 28 "flex.l"
+#line 35 "flex.l"
 { return '='; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 29 "flex.l"
+#line 36 "flex.l"
 { return '^'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 30 "flex.l"
+#line 37 "flex.l"
 { return '+'; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 31 "flex.l"
+#line 38 "flex.l"
 { return '-'; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 32 "flex.l"
+#line 39 "flex.l"
 { return '*'; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 33 "flex.l"
+#line 40 "flex.l"
 { return '/'; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 34 "flex.l"
+#line 41 "flex.l"
 { return '^'; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 35 "flex.l"
+#line 42 "flex.l"
 { return '('; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 36 "flex.l"
+#line 43 "flex.l"
 { return ')'; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 37 "flex.l"
+#line 44 "flex.l"
 { return ';'; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 38 "flex.l"
+#line 45 "flex.l"
 { /* Ignorar espacios en blanco y tabs */ }
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 39 "flex.l"
+#line 46 "flex.l"
 {return '\n'; }
 	YY_BREAK
-case 22:
-YY_RULE_SETUP
-#line 40 "flex.l"
-{ return *yytext; }
-	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 42 "flex.l"
+#line 48 "flex.l"
 {
     terminar_archivo();
 }
 	YY_BREAK
-case 23:
+case 22:
 YY_RULE_SETUP
-#line 46 "flex.l"
+#line 52 "flex.l"
 ECHO;
 	YY_BREAK
-#line 906 "lex.yy.c"
+#line 908 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1905,5 +1907,10 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 46 "flex.l"
+#line 52 "flex.l"
 
+
+void liberarMemoria(){
+    for (int i=0; i<direcciones;i++) free(arrayDirecciones[i]); //Liberamos las direcciones de memoria que se pasan al bison
+    direcciones =0; //Reiniciamos a cero el contador de direcciones para la siguiente entrada de datos
+}
