@@ -1,6 +1,7 @@
-a = 1+1
 2*3
+a = 1 + 1
 a
+LOAD hola.txt
 WORKSPACE
 ECHO(OFF)
 3+5
@@ -10,4 +11,5 @@ ECHO(ON)
 a
 a = sin(1);
 a
-
+LOAD prueba2.txt
+a

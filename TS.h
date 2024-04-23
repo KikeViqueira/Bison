@@ -10,7 +10,10 @@
 void initTS();
 
 // Función para buscar una variable dentro de la tabla de símbolos por su lexema, mete su numero correspondiente en la estructura
-void buscarVariable(char *lexema, double nuevoContenido);
+//En caso de buscar de forma correcta la variable (no coincidir con una función o constante) se le asigna el nuevo contenido a la variable y se modifica el nodo en la tabla de simbolos
+//EN caso de que la variable no exista en la tabla de simbolos, se inserta en la tabla de simbolos, siempre y cuando no sea una función o constante
+//Devuelve 1 si se ha encontrado la variable y se ha modificado su contenido o se ha insertado con su contenido inicial, 0 si no se ha encontrado la variable o esta coincide con una función o constante
+int buscarVariable(char *lexema, double nuevoContenido);
 
 // Función para insertar un lexema en la tabla de símbolos
 void insertarLexema(char *lexema_a_insertar,TIPOELEMENTOABB *nodo);

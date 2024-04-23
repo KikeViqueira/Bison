@@ -60,12 +60,12 @@ void limpiarWorkspace(TABB *A) {
     if (*A != NULL) {
         limpiarWorkspace(&(*A)->izq);
         limpiarWorkspace(&(*A)->der);
-        if(((*A)->info.type)!=1){
-            //Se eliminan todos los nodos del arbol que no sean funciones
+        if (((*A)->info.type) != 1 && ((*A)->info.type)!=2){
+            //Se eliminan todos los nodos del arbol que no sean funciones y constantes
             _destruir_elem(&(*A)->info);
             free(*A);
             *A = NULL;
-        }
+            }
     }
 }
 
@@ -220,7 +220,8 @@ void imprimir(TABB A) {
         imprimir(izqAbb(A));
         //Dependiendo de si se trata de una variable o una funcion hacemos prints distintos
         if (A->info.type==0) printf(GREEN "%-20s | %10.2f | %-7s\n" RESET, A->info.lexema, A->info.tipo.var, "VAR");
-        else printf(GREEN "%-20s | %10p | %-7s\n" RESET, A->info.lexema, A->info.tipo.fnctptr, "FUNC");
+        else if (A->info.type==1) printf(GREEN "%-20s | %10p | %-7s\n" RESET, A->info.lexema, A->info.tipo.fnctptr, "FUNC");
+        else printf(GREEN "%-20s | %10.2f | %-7s\n" RESET, A->info.lexema, A->info.tipo.var, "CONS");
         imprimir(derAbb(A));
     }
 }

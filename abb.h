@@ -43,7 +43,7 @@ void destruirAbb(TABB *A);
 
 
 /**
- * Limpia el arbol recursivamente, excepto los nodos que son funciones
+ * Limpia el arbol recursivamente, excepto los nodos que son funciones y constantes
  * @param A El arbol que queremos limpiar
  */
 void limpiarWorkspace(TABB *A);
